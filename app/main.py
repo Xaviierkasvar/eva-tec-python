@@ -20,7 +20,7 @@ def custom_openapi():
 
     # Obtener el esquema por defecto
     openapi_schema = get_openapi(
-        title="Swagger APIs Prueba Pyhton OneCore",  # Cambiar el título
+        title="Swagger APIs Prueba Python OneCore",  # Cambiar el título
         version="1.0.0",  # Cambiar la versión
         description="Documentación de la APIs solicitas en prueba para desarrollo en Python.",
         routes=app.routes,

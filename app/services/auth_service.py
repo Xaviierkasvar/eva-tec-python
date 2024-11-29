@@ -26,29 +26,37 @@ async def authenticate_user(username: str, password: str):
     connection = get_db_connection()
     try:
         with connection.cursor() as cursor:
+            # Consulta del usuario por username
             query = "SELECT user_id, username, password, role FROM users WHERE username = ?"
             cursor.execute(query, (username,))
             db_user = cursor.fetchone()
 
-            if db_user is None:
-                message = "Username does not exist"
-                store_log(message, "ERROR")
-                raise HTTPException(status_code=404, detail=message)
+            # Si el usuario no existe o la contraseña es incorrecta
+            if db_user is None or db_user[2] != password:
+                # Detalle específico para el log
+                if db_user is None:
+                    message = "Username does not exist"
+                else:
+                    message = f"Incorrect password for username: {username}"
 
-            if db_user[2] != password:
-                message = "Incorrect password"
+                # Guardar el error en el log con detalle específico
                 store_log(message, "ERROR")
-                raise HTTPException(status_code=401, detail=message)
+                
+                # Mensaje genérico para el cliente
+                raise HTTPException(status_code=401, detail="Username or password is incorrect")
 
+            # Generar el token de acceso
             access_token_expires = timedelta(minutes=15)  # Token expira en 15 minutos
             access_token = create_access_token(
                 data={"sub": db_user[1], "role": db_user[3]},
                 expires_delta=access_token_expires
             )
 
+            # Log de autenticación exitosa
             message = f"user_id:{db_user[0]}, successfully authenticated."
             store_log(message, "INFO")
 
+            # Respuesta exitosa
             return {
                 "user_id": db_user[0],
                 "username": db_user[1],

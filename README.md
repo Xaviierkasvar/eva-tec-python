@@ -112,5 +112,5 @@ uvicorn app.main:app --reload
 ## Autor
 
 **Francisco Javier Castillo Barrios**  
-📧 javier_castillo_15@hotmail.com
+📧 javier_castillo_15@hotmail.es
 
