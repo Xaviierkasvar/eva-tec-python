@@ -8,11 +8,22 @@
 
 ## Requerimientos
 
+### Backend
 - **Python** 3.8 o superior
 - **FastAPI**
 - **AWS S3** (para almacenamiento de archivos)
-- **SQL Server** (para el almacenamiento de datos)
+- **SQL Server** (para almacenamiento de datos)
 - **JWT** (JSON Web Token) para autenticación
+
+### Frontend
+- **Node.js** 14.0 o superior
+- **React** 17.0 o superior
+- **npm** o **yarn**
+- Bibliotecas adicionales:
+  - **axios** para llamadas API
+  - **react-router-dom** para navegación
+  - **material-ui** o **shadcn/ui** para componentes
+  - **react-excel-renderer** para exportación a Excel
 
 ---
 
@@ -21,37 +32,77 @@
 ```plaintext
 eva-tec-python/
 │   README.md
-│   requirements.txt
-│   .env
-│   file_logs.log
 │
-├───app
-│   │   __init__.py
-|   |   db.py
-│   │   main.py
+├───backend/
+│   │   README.md
+│   │   requirements.txt
+│   │   .env
+|   |   file_logs.log
 │   │
-│   ├───controllers
-│   │   │   auth_controller.py
-│   │   │   upload_file_controller.py
+│   ├───app/
+│   │   │   __init__.py
+│   │   │   db.py
+│   │   │   main.py
+│   │   │
+│   │   ├───controllers/
+│   │   │   │   auth_controller.py
+│   │   │   │   upload_file_controller.py
+│   │   │   │   history_controller.py
+│   │   │
+│   │   ├───services/
+│   │   │   │   auth_service.py
+│   │   │   │   file_upload_service.py
+│   │   │   │   log_service.py
+│   │   │   │   history_service.py
+│   │   │
+│   │   └───models/
+│   │       │   history_model.py
 │   │
-│   ├───services
-│   │   │   auth_service.py
-│   │   │   file_upload_service.py
-│   │   │   log_service.py
-│   │
-└───venv/  # Entorno virtual
+│   └───venv/
+│
+└───frontend/
+    │   package.json
+    │
+    ├───public/
+    │   ├───favicon.ico
+    │   ├───index.html
+    │   ├───logo192.png
+    │   ├───logo512.png
+    │   ├───manifest.json
+    │   └───robots.txt
+    │
+    ├───src/
+    │   ├───components/
+    │   │   ├───EventLog.jsx
+    │   │   ├───Login.jsx
+    │   │
+    │   ├───App.css
+    │   ├───App.js
+    │   ├───App.test.js
+    │   ├───index.css
+    │   ├───index.js
+    │   ├───logo.svg
+    │   ├───reportWebVitals.js
+    │   └───setupTests.js
+    │
+    └───node_modules/
 ```
 
-## Instalación
+## Instalación y Configuración Backend
 
-### 1. Clonar el Repositorio
+### Clonar el Repositorio
 
 ```bash
 git clone https://github.com/Xaviierkasvar/eva-tec-python.git
 cd eva-tec-python
 ```
 
-### 2. Configurar Entorno Virtual
+### 1. Navegar al directorio backend
+
+```bash
+# Dirígete al directorio del backend:
+cd backend
+```
 
 ```bash
 # Crear entorno virtual
@@ -65,19 +116,38 @@ python -m venv venv
 source venv/bin/activate
 ```
 
-### 3. Instalar Dependencias
+### 2. Instalar dependencias de Python
 
 ```bash
 pip install -r requirements.txt
 ```
 
-## Ejecución del Proyecto
-
-### Iniciar Servidor
+### 3. Iniciar servidor FastAPI
 
 ```bash
 uvicorn app.main:app --reload
 ```
+
+### 1. Navegar al directorio frontend
+
+```bash
+# Dirígete al directorio del backend:
+cd frontend
+```
+
+### 2. Instalar dependencias npm
+
+```bash
+npm install
+```
+
+### 3. Iniciar servidor de desarrollo
+
+```bash
+npm start
+```
+
+
 
 ### Endpoints y Documentación
 

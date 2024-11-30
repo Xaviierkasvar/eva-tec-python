@@ -1,6 +1,7 @@
 from fastapi import FastAPI
 import uvicorn
 from fastapi.openapi.utils import get_openapi
+from starlette.middleware.cors import CORSMiddleware
 
 # Importar los routers de los controladores
 from app.controllers.auth_controller import router as auth_router
@@ -13,6 +14,15 @@ app = FastAPI(
     title="Prueba API Python",
     version="0.1.0",
     openapi_version="3.0.3"  # Cambiar a la versión que necesitas
+)
+
+# Agregar middleware de CORS
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:3000"],  # Permitir el acceso desde tu frontend
+    allow_credentials=True,
+    allow_methods=["*"],  # Permitir todos los métodos (GET, POST, etc.)
+    allow_headers=["*"],  # Permitir todos los encabezados
 )
 
 # Personalizar el esquema de OpenAPI
