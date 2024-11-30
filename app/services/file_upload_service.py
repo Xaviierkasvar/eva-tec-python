@@ -36,23 +36,23 @@ def upload_file_to_s3(contents: bytes, s3_key: str):
         with BytesIO(contents) as file_data:
             s3_client.upload_fileobj(file_data, BUCKET_NAME, s3_key)
         message = f"Archivo subido con éxito a {BUCKET_NAME}/{s3_key}"
-        store_log(message, "INFO")
+        store_log("CARGA_DOCUMENTO", message, "INFO")
         return {"message": message}
     except FileNotFoundError:
         message = "El archivo no fue encontrado."
-        store_log(message, "ERROR")
+        store_log("CARGA_DOCUMENTO", message, "ERROR")
         raise HTTPException(status_code=404, detail=message)
     except NoCredentialsError:
         message = "Credenciales no encontradas."
-        store_log(message, "ERROR")
+        store_log("CARGA_DOCUMENTO", message, "ERROR")
         raise HTTPException(status_code=403, detail=message)
     except PartialCredentialsError:
         message = "Credenciales incompletas."
-        store_log(message, "ERROR")
+        store_log("CARGA_DOCUMENTO", message, "ERROR")
         raise HTTPException(status_code=403, detail=message)
     except Exception as e:
         message = f"Ocurrió un error al subir el archivo: {e}"
-        store_log(message, "ERROR")
+        store_log("CARGA_DOCUMENTO", message, "ERROR")
         raise HTTPException(status_code=500, detail=message)
 
 def validate_csv(contents: bytes):
@@ -73,7 +73,7 @@ def validate_csv(contents: bytes):
         return validation_results
     except Exception as e:
         message = f"Ocurrió un error al validar el archivo: {e}"
-        store_log(message, "ERROR")
+        store_log("CARGA_DOCUMENTO", message, "ERROR")
         raise HTTPException(status_code=500, detail=message)
 
 def store_csv_data(contents: bytes, param1: str = None, param2: str = None):
@@ -99,8 +99,8 @@ def store_csv_data(contents: bytes, param1: str = None, param2: str = None):
             conn.close()
 
         message = "Archivo procesado y almacenado exitosamente."
-        store_log(message, "INFO")
+        store_log("CARGA_DOCUMENTO", message, "INFO")
     except Exception as e:
         message = f"Ocurrió un error al almacenar el archivo: {e}"
-        store_log(message, "ERROR")
+        store_log("CARGA_DOCUMENTO", message, "ERROR")
         raise HTTPException(status_code=500, detail=message)

@@ -40,7 +40,7 @@ async def authenticate_user(username: str, password: str):
                     message = f"Incorrect password for username: {username}"
 
                 # Guardar el error en el log con detalle específico
-                store_log(message, "ERROR")
+                store_log("INTERACCION_USUARIO", message, "ERROR")
                 
                 # Mensaje genérico para el cliente
                 raise HTTPException(status_code=401, detail="Username or password is incorrect")
@@ -54,7 +54,7 @@ async def authenticate_user(username: str, password: str):
 
             # Log de autenticación exitosa
             message = f"user_id:{db_user[0]}, successfully authenticated."
-            store_log(message, "INFO")
+            store_log("INTERACCION_USUARIO", message, "INFO")
 
             # Respuesta exitosa
             return {
@@ -67,7 +67,7 @@ async def authenticate_user(username: str, password: str):
         raise e
     except Exception as e:
         message = f"Error al autenticar usuario: {e}"
-        store_log(message, "ERROR")
+        store_log("INTERACCION_USUARIO", message, "ERROR")
         raise HTTPException(status_code=500, detail=message)
     finally:
         connection.close()
@@ -80,7 +80,7 @@ def verify_token(token: str):
 
         if not username or not role:
             message = "Token inválido"
-            store_log(message, "ERROR")
+            store_log("INTERACCION_USUARIO", message, "ERROR")
             raise HTTPException(status_code=401, detail=message)
 
         return payload
@@ -110,13 +110,13 @@ def refresh_access_token(token: str):
         new_token = create_access_token(data={"sub": username, "role": role}, expires_delta=timedelta(minutes=15))
 
         message = f"successfully refresh access token."
-        store_log(message, "INFO")
+        store_log("INTERACCION_USUARIO", message, "INFO")
 
         return new_token
     except HTTPException as e:
-        store_log(e, "ERROR")
+        store_log("INTERACCION_USUARIO", e, "ERROR")
         raise e
     except Exception as e:
         message = f"Error al refrescar el token: {e}"
-        store_log(message, "ERROR")
+        store_log("INTERACCION_USUARIO", message, "ERROR")
         raise HTTPException(status_code=500, detail=message)

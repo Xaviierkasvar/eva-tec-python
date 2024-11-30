@@ -17,7 +17,7 @@ class UploadResponse(BaseModel):
     validation_results: list
 
     class Config:
-        schema_extra = {
+        json_schema_extra = {
             "example": {
                 "upload_result": {"message": "Archivo subido con éxito a bucket-name/files/filename.csv"},
                 "validation_results": []
@@ -47,8 +47,8 @@ async def upload_file(
         
         return result
     except HTTPException as e:
-        store_log(e, "ERROR")
+        store_log("CARGA_DOCUMENTO", e, "ERROR")
         raise e
     except Exception as e:
-        store_log(e, "ERROR")
+        store_log("CARGA_DOCUMENTO", e, "ERROR")
         raise HTTPException(status_code=500, detail=f"Error al subir el archivo: {e}")

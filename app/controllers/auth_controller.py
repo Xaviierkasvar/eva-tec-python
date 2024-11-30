@@ -38,7 +38,7 @@ class TokenResponse(BaseModel):
     access_token: str
 
     class Config:
-        schema_extra = {
+        json_schema_extra = {
             "example": {
                 "access_token": "new-fake-jwt-token"
             }

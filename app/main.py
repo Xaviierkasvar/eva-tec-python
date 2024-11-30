@@ -5,6 +5,8 @@ from fastapi.openapi.utils import get_openapi
 # Importar los routers de los controladores
 from app.controllers.auth_controller import router as auth_router
 from app.controllers.upload_file_controller import router as upload_router
+from app.controllers.document_analysis_controller import router as document_analysis_router  # Nuevo controlador
+from app.controllers.history_controller import router as history_router  # Nuevo controlador
 
 # Crear la instancia principal de la aplicación FastAPI
 app = FastAPI(
@@ -47,6 +49,8 @@ app.openapi = custom_openapi
 # Incluir los routers en la aplicación FastAPI
 app.include_router(auth_router)
 app.include_router(upload_router)
+app.include_router(document_analysis_router)  # Nuevo router
+app.include_router(history_router)  # Nuevo router
 
 if __name__ == "__main__":
     uvicorn.run(app, host="127.0.0.1", port=8000)
