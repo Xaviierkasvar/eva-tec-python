@@ -2,7 +2,21 @@
 
 ## Descripción
 
-**EVA-TEC-PYTHON** es un proyecto de evaluación técnica en Python que utiliza **FastAPI** para desarrollar una aplicación web. El objetivo principal es crear APIs REST que integren herramientas de inteligencia artificial, manejen datos en **AWS** y almacenen información en bases de datos **SQLServer**.
+**EVA-TEC-PYTHON** es un proyecto de evaluación técnica en Python que utiliza **FastAPI** para desarrollar una aplicación web. El objetivo principal es crear APIs REST que integren herramientas de inteligencia artificial, manejen datos en AWS y almacenen información en bases de datos SQLServer. Además, incluye una parte de frontend desarrollada con **React**, donde se implementa un sistema de **login de autenticación** para acceder a la aplicación.
+
+Una vez autenticado, el usuario puede acceder a una vista que muestra un **log de eventos registrados**, donde se puede visualizar y gestionar información relevante. Los eventos incluyen los siguientes campos:
+
+- **ID del evento**
+- **Tipo** (Carga de documento, IA, Interacción del usuario)
+- **Descripción del evento**
+- **Fecha y hora**
+
+Las funcionalidades principales de esta vista incluyen:
+
+- Filtros por **tipo**, **descripción** o **rango de fechas**.
+- **Exportación** del contenido a **Excel**.
+
+Este enfoque permite tener una interfaz completa tanto para la gestión de eventos como para el acceso controlado mediante autenticación.
 
 ---
 
@@ -88,7 +102,7 @@ eva-tec-python/
     └───node_modules/
 ```
 
-## Instalación y Configuración Backend
+## Instalación y Configuración
 
 ### Clonar el Repositorio
 
@@ -128,20 +142,20 @@ pip install -r requirements.txt
 uvicorn app.main:app --reload
 ```
 
-### 1. Navegar al directorio frontend
+### 3. Navegar al directorio frontend
 
 ```bash
 # Dirígete al directorio del backend:
 cd frontend
 ```
 
-### 2. Instalar dependencias npm
+### 4. Instalar dependencias npm
 
 ```bash
 npm install
 ```
 
-### 3. Iniciar servidor de desarrollo
+### 5. Iniciar servidor de desarrollo
 
 ```bash
 npm start
