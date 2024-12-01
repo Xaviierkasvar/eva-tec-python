@@ -23,21 +23,10 @@ Este enfoque permite tener una interfaz completa tanto para la gestión de event
 ## Requerimientos
 
 ### Backend
-- **Python** 3.8 o superior
-- **FastAPI**
-- **AWS S3** (para almacenamiento de archivos)
-- **SQL Server** (para almacenamiento de datos)
-- **JWT** (JSON Web Token) para autenticación
+- **Python** 3.10.6 o superior
 
 ### Frontend
-- **Node.js** 14.0 o superior
-- **React** 17.0 o superior
-- **npm** o **yarn**
-- Bibliotecas adicionales:
-  - **axios** para llamadas API
-  - **react-router-dom** para navegación
-  - **material-ui** o **shadcn/ui** para componentes
-  - **react-excel-renderer** para exportación a Excel
+- **Node.js** 20.12.2 o superior
 
 ---
 
@@ -45,10 +34,11 @@ Este enfoque permite tener una interfaz completa tanto para la gestión de event
 
 ```plaintext
 eva-tec-python/
+|   docker-compose.yml
 │   README.md
 │
 ├───backend/
-│   │   README.md
+│   │   Dockerfile
 │   │   requirements.txt
 │   │   .env
 |   |   file_logs.log
@@ -75,6 +65,7 @@ eva-tec-python/
 │   └───venv/
 │
 └───frontend/
+    |   Dockerfile
     │   package.json
     │
     ├───public/
@@ -102,21 +93,24 @@ eva-tec-python/
     └───node_modules/
 ```
 
-## Instalación y Configuración
+# Instalación y Configuración
 
-### Clonar el Repositorio
+## Clonar el Repositorio
 
 ```bash
 git clone https://github.com/Xaviierkasvar/eva-tec-python.git
 cd eva-tec-python
 ```
 
-### 1. Navegar al directorio backend
+## 1. Configuración del Backend
+
+### Navegar al Directorio del Backend
 
 ```bash
-# Dirígete al directorio del backend:
 cd backend
 ```
+
+### Crear y Activar un Entorno Virtual
 
 ```bash
 # Crear entorno virtual
@@ -130,38 +124,89 @@ python -m venv venv
 source venv/bin/activate
 ```
 
-### 2. Instalar dependencias de Python
+### Instalar Dependencias de Python
 
 ```bash
 pip install -r requirements.txt
 ```
 
-### 3. Iniciar servidor FastAPI
+### Iniciar el Servidor FastAPI
 
 ```bash
 uvicorn app.main:app --reload
 ```
 
-### 3. Navegar al directorio frontend
+## 2. Configuración del Frontend
+
+### Navegar al Directorio del Frontend
 
 ```bash
-# Dirígete al directorio del backend:
 cd frontend
 ```
 
-### 4. Instalar dependencias npm
+### Instalar Dependencias de npm
 
 ```bash
 npm install
 ```
 
-### 5. Iniciar servidor de desarrollo
+### Iniciar el Servidor de Desarrollo
 
 ```bash
 npm start
 ```
 
+## 3. Configuración y Ejecución con Docker
 
+### Instalación de Docker
+
+#### En Windows
+1. Descarga e instala **Docker Desktop** desde su sitio oficial: [Docker Desktop](https://www.docker.com/products/docker-desktop).
+2. Asegúrate de habilitar la integración de WSL 2 durante la instalación si estás utilizando Windows 10 o superior.
+
+#### En Linux
+1. Sigue las instrucciones para instalar Docker desde el sitio oficial: [Docker Engine](https://docs.docker.com/engine/install/).
+2. Asegúrate de que Docker esté ejecutándose:
+
+```bash
+sudo systemctl start docker
+sudo systemctl enable docker
+```
+
+3. Si también necesitas Docker Compose, instálalo con:
+
+```bash
+sudo apt-get update
+sudo apt-get install docker-compose
+```
+
+### Construir y Levantar los Contenedores
+
+Desde la raíz del proyecto:
+
+1. Construye las imágenes de los contenedores sin utilizar la caché:
+
+```bash
+docker-compose build --no-cache
+```
+
+2. Levanta los servicios:
+
+```bash
+docker-compose up
+```
+
+### Verificar la Aplicación
+- El servidor backend estará disponible en `http://localhost:8000`
+- El servidor frontend estará disponible en `http://localhost:3000`
+
+### Detener los Contenedores
+
+Cuando quieras detener los servicios:
+
+```bash
+docker-compose down
+```
 
 ### Endpoints y Documentación
 

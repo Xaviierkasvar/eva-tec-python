@@ -1,0 +1,30 @@
+version: '3.9'
+
+services:
+  backend:
+    build:
+      context: ./backend
+    ports:
+      - "8000:8000"
+    environment:
+      - DB_HOST=eva-tec-python.c50yoqgcme0w.us-east-2.rds.amazonaws.com
+      - DB_PORT=1433
+      - DB_DATABASE=eva_tec_python
+      - DB_USERNAME=admin
+      - DB_PASSWORD=Info.2024*
+      - SECRET_KEY=G5$9vA2!p3L4t#8z7BjFqO&KjF1sLqW8
+      - ALGORITHM=HS256
+    networks:
+      - eva-tec-network
+
+  frontend:
+    build:
+      context: ./frontend
+    ports:
+      - "3000:3000"
+    networks:
+      - eva-tec-network
+
+networks:
+  eva-tec-network:
+    driver: bridge

@@ -12,17 +12,15 @@ const EventLog = ({ token }) => {
     description: "",
   });
   const [logs, setLogs] = useState([]);
-  const [hasQueried, setHasQueried] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [totalPages, setTotalPages] = useState(1);
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
   const [totalRecords, setTotalRecords] = useState(null); // Variable para almacenar total_records
 
+  // Effect to fetch logs when page or pageSize changes
   useEffect(() => {
-    if (hasQueried) {
-      fetchLogs();
-    }
+    fetchLogs();
   }, [currentPage, pageSize]);
 
   const fetchLogs = async () => {
@@ -48,7 +46,6 @@ const EventLog = ({ token }) => {
         setLogs(response.data.data);
         setTotalPages(response.data.total_pages);
         setTotalRecords(response.data.total_records); // Actualizamos total_records
-        setHasQueried(true);
       } else {
         Swal.fire({
           icon: "error",
@@ -68,7 +65,7 @@ const EventLog = ({ token }) => {
   };
 
   const exportToExcel = () => {
-    if (!hasQueried) {
+    if (!logs.length) {
       Swal.fire({
         icon: "info",
         title: "Consulta requerida",
