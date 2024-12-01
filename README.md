@@ -41,7 +41,7 @@ eva-tec-python/
 │   │   Dockerfile
 │   │   requirements.txt
 │   │   .env
-|   |   file_logs.log
+|   |   pytest.ini
 │   │
 │   ├───app/
 │   │   │   __init__.py
@@ -61,6 +61,21 @@ eva-tec-python/
 │   │   │
 │   │   └───models/
 │   │       │   history_model.py
+│   │
+│   ├───tests/
+│   │   ├───controllers/
+│   │   │   │   test_auth_controller.py
+│   │   │   │   test_upload_file_controller.py
+│   │   │   │   test_history_controller.py
+│   │   │
+│   │   ├───services/
+│   │   │   │   test_auth_service.py
+│   │   │   │   test_file_upload_service.py
+│   │   │   │   test_log_service.py
+│   │   │   │   test_history_service.py
+│   │   │
+│   │   └───utils/
+│   │       │   test_helpers.py
 │   │
 │   └───venv/
 │
@@ -212,6 +227,12 @@ docker-compose down
 
 - **URL Base**: `http://127.0.0.1:8000`
 - **Documentación Swagger**: `http://127.0.0.1:8000/docs`
+
+### Ejecución pruebas unitarias
+
+```bash
+pytest -v --disable-warnings
+```
 
 ## Características Principales
 

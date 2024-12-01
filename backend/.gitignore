@@ -9,3 +9,5 @@ venv/
 
 # Ignorar configuraciones específicas del entorno
 # .env
+
+testfile.csv
