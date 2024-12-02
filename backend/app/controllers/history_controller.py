@@ -3,7 +3,7 @@ from fastapi.security import OAuth2PasswordBearer
 from pydantic import BaseModel
 from typing import Optional
 from datetime import datetime
-from app.enums.history_type import HistoryType
+from app.utils.enums.history_type import HistoryType
 from app.services.history_service import get_filtered_history
 from app.services.auth_service import verify_token
 

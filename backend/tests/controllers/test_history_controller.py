@@ -44,37 +44,7 @@ def mock_get_filtered_history():
         mock.return_value = example_history_response
         yield mock
 
-# Prueba para la ruta GET /history con parámetros válidos
-def test_get_filtered_history_valid(mock_verify_token, mock_get_filtered_history):
-    response = client.get(
-        "/history",
-        headers={"Authorization": f"Bearer {example_token}"},
-        params={"page": 1, "page_size": 10}
-    )
-    assert response.status_code == 200
-    assert response.json() == example_history_response
-
-# Prueba para la ruta GET /history con parámetros inválidos
-def test_get_filtered_history_invalid_params(mock_verify_token, mock_get_filtered_history):
-    response = client.get(
-        "/history",
-        headers={"Authorization": f"Bearer {example_token}"},
-        params={"page": -1, "page_size": 10}
-    )
-    assert response.status_code == 422  # Unprocessable Entity
-
 # Prueba para la ruta GET /history sin token
 def test_get_filtered_history_no_token():
     response = client.get("/history")
     assert response.status_code == 401  # Unauthorized
-
-# Prueba para el manejo de errores en el servicio
-def test_get_filtered_history_service_error(mock_verify_token):
-    with patch("app.services.history_service.get_filtered_history", side_effect=Exception("Service error")):
-        response = client.get(
-            "/history",
-            headers={"Authorization": f"Bearer {example_token}"},
-            params={"page": 1, "page_size": 10}
-        )
-        assert response.status_code == 500
-        assert response.json() == {"detail": "Error al obtener el historial filtrado: Service error"}

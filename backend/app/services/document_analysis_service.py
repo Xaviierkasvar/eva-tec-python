@@ -122,8 +122,11 @@ def extract_fields_data(data, keyword_mapping):
     extracted_data = {}
 
     for raw_key, raw_value in data.items():
+        print(f"Procesando: {raw_key} = {raw_value}")  
         # Limpieza de clave y normalización
         cleaned_key, embedded_value = clean_key(raw_key)
+        print("cleaned_key:", cleaned_key)
+        print("keyword_mapping:", keyword_mapping)
         matching_field = find_matching_field(cleaned_key, keyword_mapping)
 
         # Priorizar el valor incrustado si existe
@@ -209,6 +212,8 @@ async def analyze_document(file: UploadFile):
 
     extract_fields = extract_fields_data(extracted_data, KEYWORD_MAPPING)
     data_keys = set(extract_fields.keys())
+
+    print("Datos extraídos:", extract_fields)
 
     if data_keys & invoice_keywords:
         record_id = save_to_db("invoices", extract_fields)

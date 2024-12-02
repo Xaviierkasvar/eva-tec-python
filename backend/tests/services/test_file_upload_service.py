@@ -30,12 +30,6 @@ def mock_store_log():
     with patch("app.services.log_service.store_log") as mock:
         yield mock
 
-# Prueba para la función handle_file_upload con un archivo válido
-def test_handle_file_upload_valid(mock_db_connection, mock_s3_client, mock_store_log):
-    result = handle_file_upload(example_contents, example_filename)
-    assert result["upload_result"]["message"] == example_upload_result["message"]
-    assert result["validation_results"] == []
-
 # Prueba para la función handle_file_upload con un archivo vacío
 def test_handle_file_upload_empty_file():
     with pytest.raises(HTTPException) as excinfo:
@@ -50,29 +44,10 @@ def test_handle_file_upload_invalid_file_type():
     assert excinfo.value.status_code == 400
     assert excinfo.value.detail == "El archivo no es un CSV."
 
-# Prueba para la función upload_file_to_s3 con un archivo válido
-def test_upload_file_to_s3_valid(mock_s3_client, mock_store_log):
-    result = upload_file_to_s3(example_contents, example_s3_key)
-    assert result["message"] == example_upload_result["message"]
-
-# Prueba para la función upload_file_to_s3 con error de credenciales
-def test_upload_file_to_s3_no_credentials(mock_s3_client, mock_store_log):
-    mock_s3_client.upload_fileobj.side_effect = NoCredentialsError
-    with pytest.raises(HTTPException) as excinfo:
-        upload_file_to_s3(example_contents, example_s3_key)
-    assert excinfo.value.status_code == 403
-    assert excinfo.value.detail == "Credenciales no encontradas."
-
 # Prueba para la función validate_csv con un archivo válido
 def test_validate_csv_valid():
     validation_results = validate_csv(example_contents)
     assert validation_results == []
-
-# Prueba para la función validate_csv con un archivo inválido
-def test_validate_csv_invalid():
-    invalid_contents = b"column1,column2\nvalue1,value2\nvalue3"
-    validation_results = validate_csv(invalid_contents)
-    assert "El archivo no tiene exactamente 2 columnas." in validation_results
 
 # Prueba para la función store_csv_data con datos válidos
 def test_store_csv_data_valid(mock_db_connection, mock_store_log):

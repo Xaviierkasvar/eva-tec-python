@@ -50,32 +50,36 @@ eva-tec-python/
 │   │   │
 │   │   ├───controllers/
 │   │   │   │   auth_controller.py
+|   |   |   |   document_analysis_controller.py
 │   │   │   │   upload_file_controller.py
 │   │   │   │   history_controller.py
 │   │   │
 │   │   ├───services/
 │   │   │   │   auth_service.py
+|   |   |   |   document_analysis_service.py
 │   │   │   │   file_upload_service.py
 │   │   │   │   log_service.py
 │   │   │   │   history_service.py
-│   │   │
-│   │   └───models/
-│   │       │   history_model.py
 │   │
 │   ├───tests/
 │   │   ├───controllers/
 │   │   │   │   test_auth_controller.py
+|   |   |   |   test_document_analysis_controller.py
 │   │   │   │   test_upload_file_controller.py
 │   │   │   │   test_history_controller.py
 │   │   │
 │   │   ├───services/
 │   │   │   │   test_auth_service.py
+|   |   |   |   test_document_analysis_service.py
 │   │   │   │   test_file_upload_service.py
 │   │   │   │   test_log_service.py
 │   │   │   │   test_history_service.py
 │   │   │
 │   │   └───utils/
-│   │       │   test_helpers.py
+│   │   |   │   test_helpers.py
+|   │   │   
+│   │   └───enums/
+│   │       │   history_type.py
 │   │
 │   └───venv/
 │
@@ -231,6 +235,14 @@ docker-compose down
 ### Ejecución pruebas unitarias
 
 ```bash
+# Crear entorno virtual
+python -m venv venv
+
+# Activar entorno virtual
+# Windows
+.\venv\Scripts\activate
+
+# Ejecutar las pruebas unitarias
 pytest -v --disable-warnings
 ```
 

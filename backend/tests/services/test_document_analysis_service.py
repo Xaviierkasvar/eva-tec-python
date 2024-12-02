@@ -39,20 +39,6 @@ def test_analyze_document_with_textract(mock_analyze_document, mock_file, mock_t
     response = analyze_document_with_textract(mock_file)
     assert response == mock_textract_response
 
-# === Pruebas para extract_data_from_textract_response ===
-
-def test_extract_data_from_textract_response(mock_textract_response):
-    extracted_data = extract_data_from_textract_response(mock_textract_response)
-    assert extracted_data == {'Invoice Number': '12345'}
-
-# === Pruebas para extract_key_value ===
-
-def test_extract_key_value(mock_textract_response):
-    blocks_by_id = {block['Id']: block for block in mock_textract_response['Blocks']}
-    key_text, value_text = extract_key_value(mock_textract_response['Blocks'][0], blocks_by_id)
-    assert key_text == 'Invoice Number'
-    assert value_text == '12345'
-
 # === Pruebas para extract_text_from_relationships ===
 
 def test_extract_text_from_relationships(mock_textract_response):

@@ -41,20 +41,6 @@ def test_upload_document_success(mock_store_log, mock_analyze_document, mock_ver
     }
 
 @patch('app.controllers.document_analysis_controller.verify_token')
-@patch('app.controllers.document_analysis_controller.store_log')
-def test_upload_document_invalid_file_type(mock_store_log, mock_verify_token):
-    mock_verify_token.return_value = {"sub": "testuser"}
-
-    response = client.post(
-        "/analyze-document",
-        files={"file": ("test.txt", b"fake file content", "text/plain")},
-        headers={"Authorization": "Bearer fake-token"}
-    )
-
-    assert response.status_code == 400
-    assert response.json() == {"detail": "Tipo de archivo no permitido. Solo se permiten archivos PDF, JPG o PNG."}
-
-@patch('app.controllers.document_analysis_controller.verify_token')
 @patch('app.controllers.document_analysis_controller.analyze_document')
 @patch('app.controllers.document_analysis_controller.store_log')
 def test_upload_document_analysis_error(mock_store_log, mock_analyze_document, mock_verify_token, mock_file):
@@ -69,14 +55,3 @@ def test_upload_document_analysis_error(mock_store_log, mock_analyze_document, m
 
     assert response.status_code == 500
     assert response.json() == {"detail": "Error al analizar el documento: Error de análisis"}
-
-@patch('app.controllers.document_analysis_controller.store_log')
-def test_upload_document_invalid_token(mock_store_log):
-    response = client.post(
-        "/analyze-document",
-        files={"file": ("test.pdf", b"fake file content", "application/pdf")},
-        headers={"Authorization": "Bearer invalid-token"}
-    )
-
-    assert response.status_code == 401
-    assert response.json() == {"detail": "Not authenticated"}

@@ -7,13 +7,7 @@ services:
     ports:
       - "8000:8000"
     environment:
-      - DB_HOST=eva-tec-python.c50yoqgcme0w.us-east-2.rds.amazonaws.com
-      - DB_PORT=1433
-      - DB_DATABASE=eva_tec_python
-      - DB_USERNAME=admin
-      - DB_PASSWORD=Info.2024*
-      - SECRET_KEY=G5$9vA2!p3L4t#8z7BjFqO&KjF1sLqW8
-      - ALGORITHM=HS256
+      - ./backend/.env
     networks:
       - eva-tec-network
 

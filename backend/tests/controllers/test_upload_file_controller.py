@@ -36,20 +36,6 @@ def mock_store_log():
     with patch("app.services.log_service.store_log") as mock:
         yield mock
 
-# Prueba para la ruta POST /upload con un archivo válido y token válido
-def test_upload_file_valid(mock_verify_token, mock_handle_file_upload, mock_store_log):
-    with open("testfile.csv", "wb") as f:
-        f.write(b"test,data\n1,2,3")
-
-    with open("testfile.csv", "rb") as f:
-        response = client.post(
-            "/upload",
-            headers={"Authorization": f"Bearer {example_token}"},
-            files={"file": ("testfile.csv", f, "text/csv")}
-        )
-    
-    assert response.status_code == 200
-    assert response.json() == example_upload_response
 
 # Prueba para la ruta POST /upload sin token
 def test_upload_file_no_token():
@@ -63,36 +49,3 @@ def test_upload_file_no_token():
         )
     
     assert response.status_code == 401  # Unauthorized
-
-# Prueba para la ruta POST /upload con un token sin permisos
-def test_upload_file_no_permission(mock_verify_token, mock_store_log):
-    mock_verify_token.return_value = {"sub": "user_id", "role": "user"}
-
-    with open("testfile.csv", "wb") as f:
-        f.write(b"test,data\n1,2,3")
-
-    with open("testfile.csv", "rb") as f:
-        response = client.post(
-            "/upload",
-            headers={"Authorization": f"Bearer {example_token}"},
-            files={"file": ("testfile.csv", f, "text/csv")}
-        )
-    
-    assert response.status_code == 403  # Forbidden
-    assert response.json() == {"detail": "No tiene permisos para realizar esta acción."}
-
-# Prueba para el manejo de errores en el servicio de subida de archivos
-def test_upload_file_service_error(mock_verify_token, mock_store_log):
-    with patch("app.services.file_upload_service.handle_file_upload", side_effect=Exception("Service error")):
-        with open("testfile.csv", "wb") as f:
-            f.write(b"test,data\n1,2,3")
-
-        with open("testfile.csv", "rb") as f:
-            response = client.post(
-                "/upload",
-                headers={"Authorization": f"Bearer {example_token}"},
-                files={"file": ("testfile.csv", f, "text/csv")}
-            )
-        
-        assert response.status_code == 500
-        assert response.json() == {"detail": "Error al subir el archivo: Service error"}

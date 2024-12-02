@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import Swal from "sweetalert2";
-import { Table, Form, Button, Row, Col, Container, Pagination } from "react-bootstrap";
+import { Table, Form, Button, Row, Col, Container } from "react-bootstrap";
 import * as XLSX from "xlsx";
+import ReactPaginate from "react-paginate"; // Importamos react-paginate
 
 const EventLog = ({ token }) => {
   const [filters, setFilters] = useState({
@@ -13,14 +14,30 @@ const EventLog = ({ token }) => {
   });
   const [logs, setLogs] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
-  const [totalPages, setTotalPages] = useState(1);
-  const [currentPage, setCurrentPage] = useState(1);
+  const [totalRecords, setTotalRecords] = useState(null); 
+  const [currentPage, setCurrentPage] = useState(0); // Usamos 0 ya que react-paginate empieza en 0
   const [pageSize, setPageSize] = useState(10);
-  const [totalRecords, setTotalRecords] = useState(null); // Variable para almacenar total_records
+  const [isSmallScreen, setIsSmallScreen] = useState(false); // Estado para controlar el tamaño de la pantalla
 
-  // Effect to fetch logs when page or pageSize changes
+  // Hook para controlar el tamaño de la pantalla
   useEffect(() => {
     fetchLogs();
+    const handleResize = () => {
+      if (window.innerWidth < 576) {
+        setIsSmallScreen(true); // Cambia a `true` si la pantalla es pequeña
+      } else {
+        setIsSmallScreen(false); // Cambia a `false` si la pantalla es más grande
+      }
+    };
+
+    // Agregar el listener al redimensionar la ventana
+    window.addEventListener("resize", handleResize);
+
+    // Verificar el tamaño de la pantalla cuando se monta el componente
+    handleResize();
+
+    // Limpiar el listener al desmontar el componente
+    return () => window.removeEventListener("resize", handleResize);
   }, [currentPage, pageSize]);
 
   const fetchLogs = async () => {
@@ -37,15 +54,14 @@ const EventLog = ({ token }) => {
           end_date: endDate || undefined,
           type: type || undefined,
           description: description || undefined,
-          page: currentPage,
+          page: currentPage + 1,
           page_size: pageSize === "all" ? undefined : pageSize,
         },
       });
 
       if (response.data.status === "success") {
         setLogs(response.data.data);
-        setTotalPages(response.data.total_pages);
-        setTotalRecords(response.data.total_records); // Actualizamos total_records
+        setTotalRecords(response.data.total_records); 
       } else {
         Swal.fire({
           icon: "error",
@@ -91,13 +107,13 @@ const EventLog = ({ token }) => {
     setFilters({ ...filters, [name]: value });
   };
 
-  const handlePageChange = (pageNumber) => {
-    setCurrentPage(pageNumber);
+  const handlePageChange = (selectedPage) => {
+    setCurrentPage(selectedPage.selected); // react-paginate pasa el índice como `selected`
   };
 
   const handlePageSizeChange = (e) => {
     setPageSize(e.target.value);
-    setCurrentPage(1); // Reset to first page when page size changes
+    setCurrentPage(0); // Reset to first page when page size changes
   };
 
   return (
@@ -159,7 +175,14 @@ const EventLog = ({ token }) => {
         </Row>
         <Row>
           <Col md={3} className="mb-3 justify-content-start">
-            <Button variant="primary" onClick={fetchLogs} disabled={isLoading}>
+            <Button 
+              variant="primary" 
+              onClick={() => {
+                setCurrentPage(0);
+                fetchLogs();
+              }} 
+              disabled={isLoading}
+            >
               {isLoading ? "Consultando..." : "Consultar"}
             </Button>{" "}
             <Button variant="success" onClick={exportToExcel} disabled={isLoading}>
@@ -180,7 +203,6 @@ const EventLog = ({ token }) => {
                 <option value="30">30</option>
                 <option value="50">50</option>
                 <option value="100">100</option>
-                {/* Si totalRecords está disponible, usamos ese valor, si no, usamos 500 */}
                 <option value={totalRecords || 500}>All</option>
               </Form.Select>
             </Form.Group>
@@ -217,18 +239,30 @@ const EventLog = ({ token }) => {
       </Table>
 
       {/* Paginación */}
-      {pageSize !== "all" && (
-        <Pagination className="justify-content-center mt-4">
-          {[...Array(totalPages).keys()].map((page) => (
-            <Pagination.Item
-              key={page + 1}
-              active={page + 1 === currentPage}
-              onClick={() => handlePageChange(page + 1)}
-            >
-              {page + 1}
-            </Pagination.Item>
-          ))}
-        </Pagination>
+      {totalRecords > 0 && (
+        <div className="d-flex justify-content-center mt-4">
+          <ReactPaginate
+            previousLabel={
+              <button className="btn btn-secondary">
+                {isSmallScreen ? "<" : "Anterior"}
+              </button>
+            }
+            nextLabel={
+              <button className="btn btn-secondary">
+                {isSmallScreen ? ">" : "Siguiente"}
+              </button>
+            }
+            pageCount={Math.ceil(totalRecords / pageSize)}
+            onPageChange={handlePageChange}
+            containerClassName={"pagination"}
+            activeClassName={"active"}
+            pageClassName={"page-item"}
+            pageLinkClassName={"page-link"}
+            previousClassName={"page-item"}
+            nextClassName={"page-item"}
+            breakLabel={"..."}
+          />
+        </div>
       )}
     </Container>
   );
