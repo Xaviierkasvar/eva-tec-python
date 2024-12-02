@@ -60,6 +60,13 @@ eva-tec-python/
 │   │   │   │   file_upload_service.py
 │   │   │   │   log_service.py
 │   │   │   │   history_service.py
+|   |   |   
+│   │   └───utils/
+│   │       │   date_utils.py
+|   |       |   text_extraction_mapping.py
+|   │       |
+│   │       └───enums/
+│   │           |  history_type.py
 │   │
 │   ├───tests/
 │   │   ├───controllers/
@@ -68,18 +75,12 @@ eva-tec-python/
 │   │   │   │   test_upload_file_controller.py
 │   │   │   │   test_history_controller.py
 │   │   │
-│   │   ├───services/
-│   │   │   │   test_auth_service.py
-|   |   |   |   test_document_analysis_service.py
-│   │   │   │   test_file_upload_service.py
-│   │   │   │   test_log_service.py
-│   │   │   │   test_history_service.py
-│   │   │
-│   │   └───utils/
-│   │   |   │   test_helpers.py
-|   │   │   
-│   │   └───enums/
-│   │       │   history_type.py
+│   │   └───services/
+│   │       │   test_auth_service.py
+|   |       |   test_document_analysis_service.py
+│   │       │   test_file_upload_service.py
+│   │       │   test_log_service.py
+│   │       │   test_history_service.py
 │   │
 │   └───venv/
 │
