@@ -23,7 +23,7 @@ def handle_file_upload(contents: bytes, filename: str, param1: str = None, param
     
     store_csv_data(contents, param1, param2)
     
-    s3_key = f"files/{filename}"
+    s3_key = f"files/file_upload/{filename}"
     upload_result = upload_file_to_s3(contents, s3_key)
     
     return {
