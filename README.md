@@ -81,6 +81,12 @@ eva-tec-python/
 │   │       │   test_file_upload_service.py
 │   │       │   test_log_service.py
 │   │       │   test_history_service.py
+|   |        
+|   ├────modifications/
+|   |    |   file_manager.py
+|   |    |
+│   │    └──services/
+│   │       └───document_analysis_service.py
 │   │
 │   └───venv/
 │
@@ -113,6 +119,8 @@ eva-tec-python/
     └───node_modules/
 ```
 
+---
+
 # Instalación y Configuración
 
 ## Clonar el Repositorio
@@ -128,6 +136,17 @@ cd eva-tec-python
 
 ```bash
 cd backend
+```
+
+### Crear archivo .env
+
+```bash
+# Crear o reemplazar archivo .env
+# Windows
+copy .env.example .env
+
+# macOS/Linux
+cp .env.example .env
 ```
 
 ### Crear y Activar un Entorno Virtual
@@ -183,6 +202,7 @@ npm start
 #### En Windows
 1. Descarga e instala **Docker Desktop** desde su sitio oficial: [Docker Desktop](https://www.docker.com/products/docker-desktop).
 2. Asegúrate de habilitar la integración de WSL 2 durante la instalación si estás utilizando Windows 10 o superior.
+3. Asegúrate contar con el archivo .env configurado con las credenciales correctas en la siguente ubicacion: backend/.env.
 
 #### En Linux
 1. Sigue las instrucciones para instalar Docker desde el sitio oficial: [Docker Engine](https://docs.docker.com/engine/install/).
@@ -199,6 +219,8 @@ sudo systemctl enable docker
 sudo apt-get update
 sudo apt-get install docker-compose
 ```
+
+4. Asegúrate contar con el archivo .env configurado con las credenciales correctas en la siguente ubicacion: backend/.env.
 
 ### Construir y Levantar los Contenedores
 
@@ -228,10 +250,14 @@ Cuando quieras detener los servicios:
 docker-compose down
 ```
 
+---
+
 ### Endpoints y Documentación
 
 - **URL Base**: `http://127.0.0.1:8000`
 - **Documentación Swagger**: `http://127.0.0.1:8000/docs`
+
+---
 
 ### Ejecución pruebas unitarias
 
@@ -246,6 +272,50 @@ python -m venv venv
 # Ejecutar las pruebas unitarias
 pytest -v --disable-warnings
 ```
+
+---
+
+# Implementación con OpenAI
+
+## Configuración Previa
+
+### 1. Configuración de API Key
+
+Reemplaza en el archivo `.env` tu clave de OpenAI:
+```
+OPENAI_API_KEY="tu_clave_de_openai_aqui"
+```
+
+### 2. Ejecución del Script de Modificación
+
+Desde la raíz del proyecto, ejecuta:
+```bash
+python backend/modifications/file_manager.py
+```
+
+## Uso del Script de Modificación
+
+Al ejecutar el script, verás el menú interactivo:
+```
+Seleccione una opción:
+1. Reemplazar archivo
+2. Revertir cambios
+3. Salir
+```
+
+### Opciones del Menú
+
+- Ingresa `1` para reemplazar el archivo modificado.
+- Ingresa `2` para restaurar el archivo original desde el respaldo.
+- Ingresa `3` para salir.
+
+## Notas Importantes
+
+1. **Respaldo automático**: El script guarda el archivo original en la ruta `backend/app/services/backup/`.
+
+2. **Eliminación del respaldo (opcional)**: Después de revertir, el respaldo se elimina automáticamente.
+
+3. **Manejo de errores**: Si el archivo modificado o el respaldo no existen, el script te notificará.
 
 ## Características Principales
 
@@ -267,6 +337,8 @@ pytest -v --disable-warnings
    git push origin feature/nueva-funcionalidad
    ```
 5. Abrir un Pull Request
+
+---
 
 ## Notas Adicionales
 
